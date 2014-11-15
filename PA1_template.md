@@ -1,33 +1,33 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 ## I am not repeatedly unzipping the file
-```{r}
+
+```r
 data<-read.csv("activity/activity.csv")
 proc_data<-as.data.frame(data)
 ```
 
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 date_split<-as.data.frame(split(proc_data$steps,proc_data$date))
 total<-numeric(61)
 for(i in 1:61){total[i]<-sum(date_split[i],na.rm=TRUE)}
 hist(total,xlab="Total Steps",main="Histogram of Steps")
 ```
 
+![plot of chunk unnamed-chunk-2](./PA1_template_files/figure-html/unnamed-chunk-2.png) 
 
-MEAN= `r mean(total)`; MEDIAN =`r median(total)`
+
+MEAN= 9354.2295; MEDIAN =1.0395 &times; 10<sup>4</sup>
 
 
 ## What is the average daily activity pattern?
 
-```{r}
+
+```r
 interval_split<-as.data.frame(split(proc_data$steps,proc_data$interval))
 average<-numeric(288)
 for(i in 1:288){average[i]<-mean(interval_split[,i],na.rm=TRUE)}
@@ -38,9 +38,12 @@ tvec<-strptime(zvec,"%R")
 plot(tvec,average,xlab="Interval",ylab="Average of Steps",main="Averge Number of Steps per Interval", type="l")
 ```
 
+![plot of chunk unnamed-chunk-3](./PA1_template_files/figure-html/unnamed-chunk-3.png) 
 
 
-```{r}
+
+
+```r
 ns<-c(-1)
 int<-c(0)
 for(i in 1:288){
@@ -51,12 +54,13 @@ for(i in 1:288){
   }
 ```
 
-Interal with maximum number of steps `r zvec[int]`
+Interal with maximum number of steps 08:35
 
 
 ## Imputing missing values
 
-```{r}
+
+```r
 steps<-proc_data$steps
 date<-proc_data$date
 interval<-proc_data$interval
@@ -68,10 +72,11 @@ for(i in 1:length(steps)){
 }
 ```
 
-There are `r count` missing values
+There are 2304 missing values
 
 
-```{r}
+
+```r
 k<-0
 for(i in 1:61){
   for(j in 1:288){
@@ -89,11 +94,12 @@ for(i in 1:length(steps)){
 }
 ```
 
-There are `r count` missing values
+There are 0 missing values
 
 
 
-```{r}
+
+```r
 proc_data_new<-data.frame(steps,date,interval)
 date_split<-as.data.frame(split(proc_data_new$steps,proc_data_new$date))
 total1<-numeric(61)
@@ -101,8 +107,10 @@ for(i in 1:61){total1[i]<-sum(date_split[i],na.rm=TRUE)}
 hist(total1,xlab="Total Steps",main="Histogram of Steps with Imputing")
 ```
 
+![plot of chunk unnamed-chunk-7](./PA1_template_files/figure-html/unnamed-chunk-7.png) 
 
-MEAN with imputing= `r mean(total1)`; MEDIAN with imputing =`r median(total1)`
+
+MEAN with imputing= 1.0766 &times; 10<sup>4</sup>; MEDIAN with imputing =1.0766 &times; 10<sup>4</sup>
 
 The distribution of steps with imputing id different, and appears more like a Gaussian.  The mean and median are now identical, and larger than the original case, as would be expected.
 
@@ -110,7 +118,8 @@ The distribution of steps with imputing id different, and appears more like a Ga
 ## Are there differences in activity patterns between weekdays and weekends?
 
 
-```{r}
+
+```r
 wvect<-weekdays(as.Date(date))
 vvect<-character(length(wvect))
 for(i in 1:length(wvect)){
@@ -147,3 +156,5 @@ par(mfrow=c(2,1))
 plot(tvec,average_we,type="l",xlab="Inverval",ylab="Average Number of sSteps",main="Weekend")
 plot(tvec,average_wd,type="l",xlab="Inverval",ylab="Average Number of sSteps",main="Weekday")
 ```
+
+![plot of chunk unnamed-chunk-8](./PA1_template_files/figure-html/unnamed-chunk-8.png) 
